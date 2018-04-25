@@ -44,36 +44,12 @@ class MainActivity : AppCompatActivity() {
                 ocrResult.setText(stringBuilder.toString())
                 Log.e("masmoudiBrahim", stringBuilder.toString())
                 wrtieFileOnInternalStorage(stringBuilder.toString(), "espagnol")
-                createFile(stringBuilder.toString(), "espagnol2emeMethod")
                 bookImageView.visibility = GONE
             }
         })
 
     }
-    private fun createFile(text: String,fileName: String){
-        val completeFileName = "$fileName.txt"
-    val file = File(Environment.getExternalStorageDirectory().absolutePath,completeFileName)
-        var fos = openFileOutput(completeFileName, Context.MODE_PRIVATE)
-        try {
-            fos = openFileOutput(completeFileName, Context.MODE_PRIVATE)
-            fos.write(text.toByteArray())
-            fos.close()
-            Toast.makeText(this, "saved to " + filesDir + "/" + completeFileName, Toast.LENGTH_LONG).show()
-            Log.e("brahim", filesDir.toString() + "/" + completeFileName)
-        } catch (e: FileNotFoundException) {
-            e.printStackTrace()
-        } catch (e: IOException) {
-            e.printStackTrace()
-        } finally {
-            if (fos != null) {
-                try {
-                    fos.close()
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
-            }
-        }
-    }
+
     private fun wrtieFileOnInternalStorage(text: String, fileName: String) {
         val completeFileName = "$fileName.txt"
         var fos = openFileOutput(completeFileName, Context.MODE_PRIVATE)

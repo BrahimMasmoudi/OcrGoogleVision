@@ -3,6 +3,7 @@ package com.example.brahimmasmoudi.ocrgooglevision
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.os.Environment
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View.GONE
@@ -12,6 +13,7 @@ import com.google.android.gms.vision.text.TextRecognizer
 import kotlinx.android.synthetic.main.activity_main.bookImageView
 import kotlinx.android.synthetic.main.activity_main.button_process
 import kotlinx.android.synthetic.main.activity_main.ocrResult
+import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
 
@@ -41,20 +43,46 @@ class MainActivity : AppCompatActivity() {
                 }
                 ocrResult.setText(stringBuilder.toString())
                 Log.e("masmoudiBrahim", stringBuilder.toString())
-                wrtieFileOnInternalStorage(stringBuilder.toString(), "espagnol.txt")
+                wrtieFileOnInternalStorage(stringBuilder.toString(), "espagnol")
+                createFile(stringBuilder.toString(), "espagnol2emeMethod")
                 bookImageView.visibility = GONE
             }
         })
 
     }
-
-    private fun wrtieFileOnInternalStorage(text: String, fileName: String) {
-        var fos = openFileOutput(fileName, Context.MODE_PRIVATE)
+    private fun createFile(text: String,fileName: String){
+        val completeFileName = "$fileName.txt"
+    val file = File(Environment.getExternalStorageDirectory().absolutePath,completeFileName)
+        var fos = openFileOutput(completeFileName, Context.MODE_PRIVATE)
         try {
-            fos = openFileOutput(fileName, Context.MODE_PRIVATE)
+            fos = openFileOutput(completeFileName, Context.MODE_PRIVATE)
             fos.write(text.toByteArray())
-            Toast.makeText(this, "saved to " + filesDir + "/" + fileName, Toast.LENGTH_LONG).show()
-            Log.e("brahim", filesDir.toString() + "/" + fileName)
+            fos.close()
+            Toast.makeText(this, "saved to " + filesDir + "/" + completeFileName, Toast.LENGTH_LONG).show()
+            Log.e("brahim", filesDir.toString() + "/" + completeFileName)
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        } finally {
+            if (fos != null) {
+                try {
+                    fos.close()
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+            }
+        }
+    }
+    private fun wrtieFileOnInternalStorage(text: String, fileName: String) {
+        val completeFileName = "$fileName.txt"
+        var fos = openFileOutput(completeFileName, Context.MODE_PRIVATE)
+        try {
+            fos = openFileOutput(completeFileName, Context.MODE_PRIVATE)
+            fos.write(text.toByteArray())
+            fos.close()
+            Toast.makeText(this, "saved to " + filesDir + "/" + completeFileName, Toast.LENGTH_LONG).show()
+            Log.e("brahim", filesDir.toString() + "/" + completeFileName)
         } catch (e: FileNotFoundException) {
             e.printStackTrace()
         } catch (e: IOException) {

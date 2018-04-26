@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.activity_main.button_process
 import kotlinx.android.synthetic.main.activity_main.ocrResult
 import java.io.File
 import java.io.FileNotFoundException
+import java.io.FileOutputStream
 import java.io.IOException
 
 class MainActivity : AppCompatActivity() {
@@ -43,15 +44,30 @@ class MainActivity : AppCompatActivity() {
                 }
                 ocrResult.setText(stringBuilder.toString())
                 Log.e("masmoudiBrahim", stringBuilder.toString())
-                wrtieFileOnInternalStorage(stringBuilder.toString(), "espagnol")
+                Log.e("masmoudiBrahimPath", Environment.getExternalStorageDirectory().getAbsolutePath())
+             //  saveFile(Environment.getExternalStorageDirectory().getAbsolutePath()+"/masmoudiSfax.txt",stringBuilder.toString().toByteArray())
+                 wrtieFileOnInternalStorage(stringBuilder.toString(), "masmoudiSfax")
                 bookImageView.visibility = GONE
             }
         })
 
     }
-
+    fun saveFile(filePath: String, data: ByteArray): Boolean {
+        Log.e("brahim","Write $filePath on internal storage")
+        try {
+            val documentFile = File(filePath)
+            documentFile.parentFile.mkdirs()
+            documentFile.createNewFile()
+            FileOutputStream(documentFile).use { it.write(data) }
+        } catch (exception: Exception) {
+            Log.e("brahim","An error occur when Writing $filePath on internal storage: {size=${data.size}}", exception)
+            return false
+        }
+        return true
+    }
     private fun wrtieFileOnInternalStorage(text: String, fileName: String) {
         val completeFileName = "$fileName.txt"
+
         var fos = openFileOutput(completeFileName, Context.MODE_PRIVATE)
         try {
             fos = openFileOutput(completeFileName, Context.MODE_PRIVATE)
